@@ -5,8 +5,14 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     public static GameManager GMinstance = null;
+
+    // Game state
     public enum GameState { GAME, GAMEOVER };
     public static GameState CurrentState;
+
+    // Text
+    public GameObject gameText;
+    public GameObject gameOverText;
 
     void Awake()
     {
@@ -25,6 +31,9 @@ public class GameManager : MonoBehaviour {
     void Start()
     {
         CurrentState = GameState.GAME;
+        Cursor.visible = false;
+        gameText.SetActive(true);
+        gameOverText.SetActive(false);
     }
 
     void Update()
@@ -32,27 +41,32 @@ public class GameManager : MonoBehaviour {
         // Update based on current state of the game
         if (CurrentState == GameState.GAME)
         {
-          
+           
         }
 
         else if (CurrentState == GameState.GAMEOVER)
         {
-
+          
         }
     }
 
-    public static void GameOver()
+    public void GameOver()
     {
         CurrentState = GameState.GAMEOVER;
         Cursor.visible = true;
+        gameText.SetActive(false);
+        gameOverText.SetActive(true);
     }
 
-    public static void ResetGame()
+    public void ResetGame()
     {
         CurrentState = GameState.GAME;
+        Cursor.visible = false;
+        gameText.SetActive(true);
+        gameOverText.SetActive(false);
     }
 
-    public static void Quit()
+    public void Quit()
     {
         Application.Quit();
     }
