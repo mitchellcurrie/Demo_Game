@@ -698,12 +698,12 @@ MonoBehaviour:
   gameManager: {fileID: 1911703935}
   playerInputString: {fileID: 526289549}
   gameStrings: {fileID: 49255848}
-  Answer: CLAP
+  Answer: MITCH
   FakeAnswers:
   - TRAP
   - TAP
   - CLAM
-  - CLASS
+  - SLAM
 --- !u!4 &1027762893
 Transform:
   m_ObjectHideFlags: 0
