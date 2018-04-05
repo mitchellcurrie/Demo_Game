@@ -103,7 +103,7 @@ public class HackerGame : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Space))           
                 playerInputString.text += "_";
             else
-                playerInputString.text += Input.inputString;
+                playerInputString.text += Input.inputString.ToUpper();
 
             // Remove the previous clue text when the player starts typing the next word
             if (playerInputResponse.text != "")
