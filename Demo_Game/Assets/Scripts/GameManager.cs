@@ -31,7 +31,6 @@ public class GameManager : MonoBehaviour {
     void Start()
     {
         CurrentState = GameState.GAME;
-        Cursor.visible = false;
         gameUI.SetActive(true);
         gameOverUI.SetActive(false);
     }
@@ -53,7 +52,6 @@ public class GameManager : MonoBehaviour {
     public void GameOver()
     {
         CurrentState = GameState.GAMEOVER;
-        Cursor.visible = true;
         gameUI.SetActive(false);
         gameOverUI.SetActive(true);
     }
@@ -61,7 +59,6 @@ public class GameManager : MonoBehaviour {
     public void ResetGame()
     {
         CurrentState = GameState.GAME;
-        Cursor.visible = false;
         gameUI.SetActive(true);
         gameOverUI.SetActive(false);
     }
