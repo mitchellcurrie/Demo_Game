@@ -15,16 +15,22 @@ public class HackerGame : MonoBehaviour {
 
     public GameManager gameManager;
 
-    // Player input
+    // Screen Text
     public TextMeshProUGUI playerInputString;
+    public TextMeshProUGUI gameStrings;
+    public TextMeshProUGUI playerInputResponse;
+
+    // Player input
     private int stringCharLimit;
 
-    // Strings
-    public TextMeshProUGUI gameStrings;
+    // Game Strings  
     private GameString[] gsArray = new GameString[10];
+
+    // Answers
     public string Answer;
     [Header("Maximum of 8 Fake Answers")]
     public string[] FakeAnswers;
+
     //private string randomChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()-+={}[]|:;<>,.?/";
     private string randomChars = "-";
     private int gameStringLength;
@@ -54,7 +60,8 @@ public class HackerGame : MonoBehaviour {
             // Mouse input
         }
 
-        else if (Input.GetKeyDown(KeyCode.Return))
+        // Pressing enter checks the current word
+        else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             if (!CheckWord(playerInputString.text))
             {
@@ -62,6 +69,8 @@ public class HackerGame : MonoBehaviour {
             }
 
             DisplayGameStrings();
+
+            // Reset the input string
             playerInputString.text = "";
 
         }
@@ -86,8 +95,8 @@ public class HackerGame : MonoBehaviour {
 
     void GameSetup()
     {
-        SetRandomStrings();
-        AddWordsToGameStrings();
+        SetRandomGameStrings();
+        AddAnswersToGameStrings();
         DisplayGameStrings();
     }
 
@@ -96,6 +105,7 @@ public class HackerGame : MonoBehaviour {
     {
         gameStrings.text = "";
 
+        // Add each game string to the text on screen
         foreach (GameString gs in gsArray)
         {
             gameStrings.text += gs.str + "\n";
@@ -103,22 +113,24 @@ public class HackerGame : MonoBehaviour {
     }
 
     // Assign random characters from "randomChars" string to each of the game strings in the array
-    void SetRandomStrings()
+    void SetRandomGameStrings()
     {
         for (int i = 0; i < gsArray.Length; i++)
         {
+            // Reset game string
             gsArray[i].str = "";
             gsArray[i].hasWordPlaced = false;
 
             for (int j = 0; j < gameStringLength; j++)
             {
+                // Add random character from preset string of characters
                 gsArray[i].str += randomChars[Random.Range(0, randomChars.Length - 1)];
             }
         }
     }
 
     // Insert the answer and fake answers into the random strings
-    void AddWordsToGameStrings()
+    void AddAnswersToGameStrings()
     {
         // Add answer
 
@@ -169,6 +181,7 @@ public class HackerGame : MonoBehaviour {
             if (playerInputString == FakeAnswers[i])
             {
                 Debug.Log("Fake answer " + i);
+                CheckFakeAnswerAndGiveClue(FakeAnswers[i]);
                 ReplaceFakeAnswer(FakeAnswers[i]);
                 return true;
             }
@@ -181,11 +194,13 @@ public class HackerGame : MonoBehaviour {
     {
         string strToReplaceFakeAnswer = "";
 
+        // Make a string the same length as the fake answer made from "."
         for (int k = 0; k < fakeAnswer.Length; k++)
         {
             strToReplaceFakeAnswer += ".";
         }
 
+        // Find the game string containing the fake answer and replace it
         for (int i = 0; i < gsArray.Length; i++)
         {
             if (gsArray[i].str.Contains(fakeAnswer))
@@ -194,6 +209,11 @@ public class HackerGame : MonoBehaviour {
                 break;
             }
         }
+    }
+
+    void CheckFakeAnswerAndGiveClue(string fakeAnswer)
+    {
+
     }
 }
 
