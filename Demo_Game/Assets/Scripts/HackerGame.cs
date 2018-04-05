@@ -22,6 +22,7 @@ public class HackerGame : MonoBehaviour {
     public TextMeshProUGUI playerInputResponse;
     public TextMeshProUGUI remainingAttempts;
     public TextMeshProUGUI gameOverText;
+    public TextMeshProUGUI timerText;
 
     // Answers
     [Header("Answers")]
@@ -42,11 +43,17 @@ public class HackerGame : MonoBehaviour {
 
     private int gameStringLength; // Length of each of the game strings on the screen
 
+    // Game timer
+    private static float gameTimer;
+    private float currentGameTimer;
+
     void Start ()
     {
+        // Set variable values
         stringCharLimit = 10;
         gameStringLength = 30;
         numberOfAttempts = 4;
+        gameTimer = 61;
     }
 	
 	void Update ()
@@ -56,6 +63,27 @@ public class HackerGame : MonoBehaviour {
             CheckPlayerInputAndDisplay();           
         }
 	}
+
+    void FixedUpdate()
+    {
+        if (GameManager.CurrentState == GameManager.GameState.GAME)
+        {
+            // Reduce timer by delta time
+            currentGameTimer -= Time.deltaTime;
+
+            // Convert to integer for rounding
+            int intTimer = (int)currentGameTimer;
+
+            // Check if time has run out
+            if (intTimer < 1)
+            {
+                GameOver("You Lose\nYou ran out of time!");
+            }
+
+            // Display timer text by updating on screen text
+            timerText.text = "Time remaining: " + intTimer.ToString();
+        }
+    }
 
     // Check player keyboard input and display to screen by updating on screen text
     void CheckPlayerInputAndDisplay()
@@ -120,6 +148,7 @@ public class HackerGame : MonoBehaviour {
     {
         // Reset variables
         currentRemainingAttempts = numberOfAttempts;
+        currentGameTimer = gameTimer;
         playerInputString.text = "";
         playerInputResponse.text = "";
         remainingAttempts.text = "Remaning attempts: " + currentRemainingAttempts;

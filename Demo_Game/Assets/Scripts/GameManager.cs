@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour {
 
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour {
     public GameObject gameUI;
     public GameObject gameOverUI;
     public GameObject instructionsUI;
+
 
     void Awake()
     {
@@ -36,25 +38,6 @@ public class GameManager : MonoBehaviour {
         gameUI.SetActive(false);
         gameOverUI.SetActive(false);
         instructionsUI.SetActive(true);
-    }
-
-    void Update()
-    {
-        // Update based on current state of the game
-        if (CurrentState == GameState.GAME)
-        {
-           
-        }
-
-        else if (CurrentState == GameState.GAMEOVER)
-        {
-          
-        }
-
-        else if (CurrentState == GameState.INSTRUCTIONS)
-        {
-
-        }
     }
 
     public void GameOver()
