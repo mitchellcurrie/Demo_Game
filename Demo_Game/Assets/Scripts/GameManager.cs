@@ -7,12 +7,13 @@ public class GameManager : MonoBehaviour {
     public static GameManager GMinstance = null;
 
     // Game state
-    public enum GameState { GAME, GAMEOVER };
+    public enum GameState { INSTRUCTIONS, GAME, GAMEOVER };
     public static GameState CurrentState;
 
-    // Text
+    // On Screen Text
     public GameObject gameUI;
     public GameObject gameOverUI;
+    public GameObject instructionsUI;
 
     void Awake()
     {
@@ -30,9 +31,11 @@ public class GameManager : MonoBehaviour {
 
     void Start()
     {
-        CurrentState = GameState.GAME;
-        gameUI.SetActive(true);
+        // Set starting game state and display instruction UI only
+        CurrentState = GameState.INSTRUCTIONS;
+        gameUI.SetActive(false);
         gameOverUI.SetActive(false);
+        instructionsUI.SetActive(true);
     }
 
     void Update()
@@ -47,6 +50,11 @@ public class GameManager : MonoBehaviour {
         {
           
         }
+
+        else if (CurrentState == GameState.INSTRUCTIONS)
+        {
+
+        }
     }
 
     public void GameOver()
@@ -54,6 +62,7 @@ public class GameManager : MonoBehaviour {
         CurrentState = GameState.GAMEOVER;
         gameUI.SetActive(false);
         gameOverUI.SetActive(true);
+        instructionsUI.SetActive(false);
     }
 
     public void ResetGame()
@@ -61,6 +70,7 @@ public class GameManager : MonoBehaviour {
         CurrentState = GameState.GAME;
         gameUI.SetActive(true);
         gameOverUI.SetActive(false);
+        instructionsUI.SetActive(false);
     }
 
     public void Quit()

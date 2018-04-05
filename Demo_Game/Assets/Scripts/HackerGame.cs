@@ -47,8 +47,6 @@ public class HackerGame : MonoBehaviour {
         stringCharLimit = 10;
         gameStringLength = 30;
         numberOfAttempts = 4;
-
-        GameSetup();
     }
 	
 	void Update ()
