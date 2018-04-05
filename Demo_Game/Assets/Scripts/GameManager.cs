@@ -11,8 +11,8 @@ public class GameManager : MonoBehaviour {
     public static GameState CurrentState;
 
     // Text
-    public GameObject gameText;
-    public GameObject gameOverText;
+    public GameObject gameUI;
+    public GameObject gameOverUI;
 
     void Awake()
     {
@@ -32,8 +32,8 @@ public class GameManager : MonoBehaviour {
     {
         CurrentState = GameState.GAME;
         Cursor.visible = false;
-        gameText.SetActive(true);
-        gameOverText.SetActive(false);
+        gameUI.SetActive(true);
+        gameOverUI.SetActive(false);
     }
 
     void Update()
@@ -54,16 +54,16 @@ public class GameManager : MonoBehaviour {
     {
         CurrentState = GameState.GAMEOVER;
         Cursor.visible = true;
-        gameText.SetActive(false);
-        gameOverText.SetActive(true);
+        gameUI.SetActive(false);
+        gameOverUI.SetActive(true);
     }
 
     public void ResetGame()
     {
         CurrentState = GameState.GAME;
         Cursor.visible = false;
-        gameText.SetActive(true);
-        gameOverText.SetActive(false);
+        gameUI.SetActive(true);
+        gameOverUI.SetActive(false);
     }
 
     public void Quit()

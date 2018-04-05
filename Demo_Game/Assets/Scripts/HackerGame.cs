@@ -160,6 +160,7 @@ public class HackerGame : MonoBehaviour {
         if (playerInputString == Answer)
         {
             Debug.Log("Correct!!");
+            gameManager.GameOver();
             return true;
         }
 
