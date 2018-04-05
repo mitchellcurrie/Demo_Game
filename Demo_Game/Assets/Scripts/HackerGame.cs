@@ -16,29 +16,34 @@ public class HackerGame : MonoBehaviour {
     public GameManager gameManager;
 
     // Screen Text
+    [Header("Screen Text")]
     public TextMeshProUGUI playerInputString;
     public TextMeshProUGUI gameStrings;
     public TextMeshProUGUI playerInputResponse;
+    public TextMeshProUGUI remainingAttempts;
 
-    // Player input
+    // Player 
     private int stringCharLimit;
+    private int numberOfAttempts;
 
     // Game Strings  
     private GameString[] gsArray = new GameString[10];
 
     // Answers
-    public string Answer;
+    [Header("Answers")]
+    public string CorrectAnswer;
     [Header("Maximum of 8 Fake Answers")]
     public string[] FakeAnswers;
 
-    //private string randomChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()-+={}[]|:;<>,.?/";
-    private string randomChars = "-";
+    private string randomChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()-+={}[]|:;<>,.?/";
+    //private string randomChars = "-";
     private int gameStringLength;
 
     void Start ()
     {
         stringCharLimit = 10;
-        gameStringLength = 20;
+        gameStringLength = 30;
+        numberOfAttempts = 3;
         playerInputString.text = "";
 
         GameSetup();
@@ -65,7 +70,7 @@ public class HackerGame : MonoBehaviour {
         {
             if (!CheckWord(playerInputString.text))
             {
-                Debug.Log("Word not found");
+                playerInputResponse.text = "Word not found!";
             }
 
             DisplayGameStrings();
@@ -90,6 +95,12 @@ public class HackerGame : MonoBehaviour {
                 playerInputString.text += "_";
             else
                 playerInputString.text += Input.inputString;
+
+            // Remove the previous clue text when the player starts typing the next word
+            if (playerInputResponse.text != "")
+            {
+                playerInputResponse.text = "";
+            }
         }
     }
 
@@ -138,9 +149,9 @@ public class HackerGame : MonoBehaviour {
         int i = Random.Range(0, gsArray.Length - 1);
 
         // Reduce the length of the string by the length of the answer being inserted
-        gsArray[i].str = gsArray[i].str.Substring(0, gsArray[i].str.Length - Answer.Length);
+        gsArray[i].str = gsArray[i].str.Substring(0, gsArray[i].str.Length - CorrectAnswer.Length);
         // Add answer in a random position
-        gsArray[i].str = gsArray[i].str.Insert(Random.Range(0, gsArray[i].str.Length - 1), Answer);
+        gsArray[i].str = gsArray[i].str.Insert(Random.Range(0, gsArray[i].str.Length - 1), CorrectAnswer);
         gsArray[i].hasWordPlaced = true;
 
         // Add fake answers
@@ -167,11 +178,8 @@ public class HackerGame : MonoBehaviour {
 
     bool CheckWord(string playerInputString)
     {
-        Debug.Log("Checking word: " + playerInputString);
-
-        if (playerInputString == Answer)
+        if (playerInputString == CorrectAnswer)
         {
-            Debug.Log("Correct!!");
             gameManager.GameOver();
             return true;
         }
@@ -180,7 +188,6 @@ public class HackerGame : MonoBehaviour {
         {
             if (playerInputString == FakeAnswers[i])
             {
-                Debug.Log("Fake answer " + i);
                 CheckFakeAnswerAndGiveClue(FakeAnswers[i]);
                 ReplaceFakeAnswer(FakeAnswers[i]);
                 return true;
@@ -213,7 +220,26 @@ public class HackerGame : MonoBehaviour {
 
     void CheckFakeAnswerAndGiveClue(string fakeAnswer)
     {
+        int CorrectChars = 0;
+        int CorrectlyPositionedChars = 0;
 
+        for (int i = 0; i < CorrectAnswer.Length; i++)
+        {
+            if (fakeAnswer.Contains(CorrectAnswer[i].ToString()))
+            {
+                //Fake answer entered contains same character as the answer
+                CorrectChars++;
+
+                if (CorrectAnswer.IndexOf(CorrectAnswer[i]) == fakeAnswer.IndexOf(CorrectAnswer[i]))
+                {
+                    //Fake answer entered contains same character as the answer AND in the correct position
+                    CorrectlyPositionedChars++;
+                }
+            }
+        }
+
+        // Update screen text
+        playerInputResponse.text = ("Word entered: " + fakeAnswer + "\n" + CorrectChars + " letters correct, " + CorrectlyPositionedChars + " in the correct position");
     }
 }
 
