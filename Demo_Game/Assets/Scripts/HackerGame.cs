@@ -26,19 +26,21 @@ public class HackerGame : MonoBehaviour {
     // Answers
     [Header("Answers")]
     public string CorrectAnswer;
-    [Header("Maximum of 8 Fake Answers")]
+    [Header("Maximum of 8 Fake Answers, Do Not Leave Blank!")]
     public string[] FakeAnswers;
 
     // Player 
-    private int stringCharLimit;
+    private int stringCharLimit; // maximum number of typed characters allowed on screen
     private int numberOfAttempts;
     private int currentRemainingAttempts;
 
-    // Game Strings  
+    // Game Strings - represent each line on the screen 
     private GameString[] gsArray = new GameString[10];
 
+    // Characters to be randomly populated in the game strings
     private string randomChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()-+={}[]|:;<>,.?/";
-    private int gameStringLength;
+
+    private int gameStringLength; // Length of each of the game strings on the screen
 
     void Start ()
     {
@@ -98,11 +100,14 @@ public class HackerGame : MonoBehaviour {
             }
         }
 
+        // Any other key input
         else if (Input.anyKeyDown && playerInputString.text.Length < stringCharLimit)
         {
+            // Add underscore for a space
             if (Input.GetKeyDown(KeyCode.Space))           
                 playerInputString.text += "_";
             else
+                // Convert lower case letters to upper case - since all answers are in upper case
                 playerInputString.text += Input.inputString.ToUpper();
 
             // Remove the previous clue text when the player starts typing the next word
@@ -115,11 +120,13 @@ public class HackerGame : MonoBehaviour {
 
     void GameSetup()
     {
+        // Reset variables
         currentRemainingAttempts = numberOfAttempts;
         playerInputString.text = "";
         playerInputResponse.text = "";
         remainingAttempts.text = "Remaning attempts: " + currentRemainingAttempts;
 
+        // Set new game strings
         SetRandomGameStrings();
         AddAnswersToGameStrings();
         DisplayGameStrings();
@@ -168,6 +175,7 @@ public class HackerGame : MonoBehaviour {
         gsArray[i].str = gsArray[i].str.Insert(Random.Range(0, gsArray[i].str.Length - 1), CorrectAnswer);
         gsArray[i].hasWordPlaced = true;
 
+
         // Add fake answers
 
         for (int j = 0; j < FakeAnswers.Length; j++)
@@ -207,6 +215,7 @@ public class HackerGame : MonoBehaviour {
         {
             if (playerInputString == FakeAnswers[i])
             {
+                // Player entered word that matched a fake answer
                 CheckFakeAnswerAndGiveClue(FakeAnswers[i]);
                 ReplaceFakeAnswer(FakeAnswers[i]);
                 return true;
@@ -263,14 +272,15 @@ public class HackerGame : MonoBehaviour {
         if (CorrectChars == 1)
             characters = "character";
 
-        // Update screen text
+        // Update screen text with clue
         playerInputResponse.text = ("Word entered: " + fakeAnswer + "\n" + CorrectChars + " " + characters + " correct, " + CorrectlyPositionedChars + " in the correct position");
     }
 
     void GameOver(string _gameOverText)
     {
-        Debug.Log("Game over called");
         gameManager.GameOver();
+
+        // Set game over text on screen
         gameOverText.text = _gameOverText;
     }
 
