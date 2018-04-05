@@ -9,6 +9,7 @@ struct GameString
 {
     public string str;
     public bool hasWordPlaced;
+    public bool wordGuessed;
 }
 
 public class HackerGame : MonoBehaviour {
@@ -179,6 +180,7 @@ public class HackerGame : MonoBehaviour {
             // Reset game string
             gsArray[i].str = "";
             gsArray[i].hasWordPlaced = false;
+            gsArray[i].wordGuessed = false;
 
             for (int j = 0; j < gameStringLength; j++)
             {
@@ -243,8 +245,12 @@ public class HackerGame : MonoBehaviour {
             if (playerInputString == FakeAnswers[i])
             {
                 // Player entered word that matched a fake answer
-                CheckFakeAnswerAndGiveClue(FakeAnswers[i]);
-                ReplaceFakeAnswer(FakeAnswers[i]);
+                // Check if the replacement is made - guards against giving the clue to an already entered fake answer
+                if (ReplaceFakeAnswer(FakeAnswers[i]))
+                {
+                    // Give clue if player is entering that fake answer for the first time
+                    CheckFakeAnswerAndGiveClue(FakeAnswers[i]);
+                }                        
                 return true;
             }
         }
@@ -252,7 +258,7 @@ public class HackerGame : MonoBehaviour {
         return false;
     }
 
-    void ReplaceFakeAnswer(string fakeAnswer)
+    bool ReplaceFakeAnswer(string fakeAnswer)
     {
         string strToReplaceFakeAnswer = "";
 
@@ -265,12 +271,18 @@ public class HackerGame : MonoBehaviour {
         // Find the game string containing the fake answer and replace it
         for (int i = 0; i < gsArray.Length; i++)
         {
-            if (gsArray[i].str.Contains(fakeAnswer))
+            // Only replace if it hasn't already been replaced
+            if (gsArray[i].str.Contains(fakeAnswer) && gsArray[i].wordGuessed == false)
             {
                 gsArray[i].str = gsArray[i].str.Replace(fakeAnswer, strToReplaceFakeAnswer);
-                break;
+                gsArray[i].wordGuessed = true;
+                return true;
             }
         }
+
+        // Returns false if player guesses a fake word they have already guessed and is no longer showing on the terminal
+        playerInputResponse.text = "Word not found!";
+        return false;
     }
 
     void CheckFakeAnswerAndGiveClue(string fakeAnswer)
