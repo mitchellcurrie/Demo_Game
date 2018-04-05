@@ -21,10 +21,12 @@ public class HackerGame : MonoBehaviour {
     public TextMeshProUGUI gameStrings;
     public TextMeshProUGUI playerInputResponse;
     public TextMeshProUGUI remainingAttempts;
+    public TextMeshProUGUI gameOverText;
 
     // Player 
     private int stringCharLimit;
     private int numberOfAttempts;
+    private int currentRemainingAttempts;
 
     // Game Strings  
     private GameString[] gsArray = new GameString[10];
@@ -43,8 +45,7 @@ public class HackerGame : MonoBehaviour {
     {
         stringCharLimit = 10;
         gameStringLength = 30;
-        numberOfAttempts = 3;
-        playerInputString.text = "";
+        numberOfAttempts = 4;
 
         GameSetup();
     }
@@ -78,6 +79,13 @@ public class HackerGame : MonoBehaviour {
             // Reset the input string
             playerInputString.text = "";
 
+            currentRemainingAttempts--;
+            remainingAttempts.text = "Remaning attempts: " + currentRemainingAttempts.ToString();
+
+            if (currentRemainingAttempts < 1)
+            {
+                GameOver("You Lose");
+            }
         }
 
         else if (Input.GetKeyDown(KeyCode.Backspace))
@@ -106,6 +114,11 @@ public class HackerGame : MonoBehaviour {
 
     void GameSetup()
     {
+        currentRemainingAttempts = numberOfAttempts;
+        playerInputString.text = "";
+        playerInputResponse.text = "";
+        remainingAttempts.text = "Remaning attempts: " + currentRemainingAttempts;
+
         SetRandomGameStrings();
         AddAnswersToGameStrings();
         DisplayGameStrings();
@@ -180,7 +193,7 @@ public class HackerGame : MonoBehaviour {
     {
         if (playerInputString == CorrectAnswer)
         {
-            gameManager.GameOver();
+            GameOver("You Win");
             return true;
         }
 
@@ -241,5 +254,18 @@ public class HackerGame : MonoBehaviour {
         // Update screen text
         playerInputResponse.text = ("Word entered: " + fakeAnswer + "\n" + CorrectChars + " letters correct, " + CorrectlyPositionedChars + " in the correct position");
     }
+
+    void GameOver(string _gameOverText)
+    {
+        gameManager.GameOver();
+        gameOverText.text = _gameOverText;
+    }
+
+    public void RestartGame()
+    {
+        gameManager.ResetGame();
+        GameSetup();
+    }
+
 }
 
