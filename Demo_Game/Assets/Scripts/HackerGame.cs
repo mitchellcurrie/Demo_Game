@@ -23,6 +23,12 @@ public class HackerGame : MonoBehaviour {
     public TextMeshProUGUI remainingAttempts;
     public TextMeshProUGUI gameOverText;
 
+    // Answers
+    [Header("Answers")]
+    public string CorrectAnswer;
+    [Header("Maximum of 8 Fake Answers")]
+    public string[] FakeAnswers;
+
     // Player 
     private int stringCharLimit;
     private int numberOfAttempts;
@@ -30,12 +36,6 @@ public class HackerGame : MonoBehaviour {
 
     // Game Strings  
     private GameString[] gsArray = new GameString[10];
-
-    // Answers
-    [Header("Answers")]
-    public string CorrectAnswer;
-    [Header("Maximum of 8 Fake Answers")]
-    public string[] FakeAnswers;
 
     private string randomChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()-+={}[]|:;<>,.?/";
     private int gameStringLength;
@@ -85,7 +85,7 @@ public class HackerGame : MonoBehaviour {
             // Check for game over - no attmepts left
             if (currentRemainingAttempts < 1)
             {
-                GameOver("You Lose");
+                GameOver("You Lose\nNo more attempts!");
             }
         }
 
@@ -195,7 +195,7 @@ public class HackerGame : MonoBehaviour {
     {
         if (playerInputString == CorrectAnswer)
         {
-            GameOver("You Win");
+            GameOver("You Win\nYou entered the correct password!");
             return true;
         }
 
