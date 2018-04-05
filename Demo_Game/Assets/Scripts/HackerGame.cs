@@ -38,7 +38,6 @@ public class HackerGame : MonoBehaviour {
     public string[] FakeAnswers;
 
     private string randomChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()-+={}[]|:;<>,.?/";
-    //private string randomChars = "-";
     private int gameStringLength;
 
     void Start ()
@@ -69,6 +68,7 @@ public class HackerGame : MonoBehaviour {
         // Pressing enter checks the current word
         else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
+            // Check if word matches either the correct or one of the fake answers
             if (!CheckWord(playerInputString.text))
             {
                 playerInputResponse.text = "Word not found!";
@@ -79,9 +79,10 @@ public class HackerGame : MonoBehaviour {
             // Reset the input string
             playerInputString.text = "";
 
-            currentRemainingAttempts--;
+            // Display remaining attempts
             remainingAttempts.text = "Remaning attempts: " + currentRemainingAttempts.ToString();
 
+            // Check for game over - no attmepts left
             if (currentRemainingAttempts < 1)
             {
                 GameOver("You Lose");
@@ -189,6 +190,7 @@ public class HackerGame : MonoBehaviour {
         }
     }
 
+    // Checks the word entered against the correct and fake answers
     bool CheckWord(string playerInputString)
     {
         if (playerInputString == CorrectAnswer)
@@ -197,6 +199,10 @@ public class HackerGame : MonoBehaviour {
             return true;
         }
 
+        // Decrement number of remaining attempts for the incorrect answer
+        currentRemainingAttempts--;
+
+        // Check player word against the fake answers
         for (int i = 0; i < FakeAnswers.Length; i++)
         {
             if (playerInputString == FakeAnswers[i])
@@ -245,18 +251,25 @@ public class HackerGame : MonoBehaviour {
 
                 if (CorrectAnswer.IndexOf(CorrectAnswer[i]) == fakeAnswer.IndexOf(CorrectAnswer[i]))
                 {
-                    //Fake answer entered contains same character as the answer AND in the correct position
+                    //Fake answer entered contains same character as the answer AND in the correct position (indexes match)
                     CorrectlyPositionedChars++;
                 }
             }
         }
 
+        // Check for 1 correct character - remove "s" as not plural
+        string characters = "characters";
+
+        if (CorrectChars == 1)
+            characters = "character";
+
         // Update screen text
-        playerInputResponse.text = ("Word entered: " + fakeAnswer + "\n" + CorrectChars + " letters correct, " + CorrectlyPositionedChars + " in the correct position");
+        playerInputResponse.text = ("Word entered: " + fakeAnswer + "\n" + CorrectChars + " " + characters + " correct, " + CorrectlyPositionedChars + " in the correct position");
     }
 
     void GameOver(string _gameOverText)
     {
+        Debug.Log("Game over called");
         gameManager.GameOver();
         gameOverText.text = _gameOverText;
     }
