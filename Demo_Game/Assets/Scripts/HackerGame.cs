@@ -8,8 +8,8 @@ using TMPro;
 struct GameString
 {
     public string str;
-    public bool hasWordPlaced;
-    public bool wordGuessed;
+    public bool hasWordPlaced; // whether one of the answers has been placed in the game string - done in game set up
+    public bool wordGuessed; // whether the word placed in the game string has been entered by the player already
 }
 
 public class HackerGame : MonoBehaviour {
@@ -25,8 +25,8 @@ public class HackerGame : MonoBehaviour {
     public TextMeshProUGUI gameOverText;
     public TextMeshProUGUI timerText;
 
-    // Answers
-    [Header("Answers")]
+    // Password Answers
+    [Header("Password Answers")]
     public string CorrectAnswer;
     [Header("Maximum of 8 Fake Answers, Do Not Leave Blank!")]
     public string[] FakeAnswers;
@@ -61,6 +61,7 @@ public class HackerGame : MonoBehaviour {
     {
 		if (GameManager.CurrentState == GameManager.GameState.GAME)
         {
+            // Get input from the player and show the characters typed in when in the "GAME" state
             CheckPlayerInputAndDisplay();           
         }
 	}
@@ -69,7 +70,6 @@ public class HackerGame : MonoBehaviour {
     {
         if (GameManager.CurrentState == GameManager.GameState.GAME)
         {
-            // Reduce timer by delta time
             currentGameTimer -= Time.deltaTime;
 
             // Convert to integer for rounding
@@ -163,6 +163,7 @@ public class HackerGame : MonoBehaviour {
     // Display game strings to screen by updating the on screen text
     void DisplayGameStrings()
     {
+        // Reset text
         gameStrings.text = "";
 
         // Add each game string to the text on screen
@@ -197,7 +198,6 @@ public class HackerGame : MonoBehaviour {
 
         // Find random gamestring in the gsArray to place the answer and store in "i"
         int i = Random.Range(0, gsArray.Length - 1);
-
         // Reduce the length of the string by the length of the answer being inserted
         gsArray[i].str = gsArray[i].str.Substring(0, gsArray[i].str.Length - CorrectAnswer.Length);
         // Add answer in a random position
@@ -271,7 +271,7 @@ public class HackerGame : MonoBehaviour {
         // Find the game string containing the fake answer and replace it
         for (int i = 0; i < gsArray.Length; i++)
         {
-            // Only replace if it hasn't already been replaced
+            // Only replace if it hasn't already been replaced (already guessed by the player)
             if (gsArray[i].str.Contains(fakeAnswer) && gsArray[i].wordGuessed == false)
             {
                 gsArray[i].str = gsArray[i].str.Replace(fakeAnswer, strToReplaceFakeAnswer);
@@ -280,7 +280,7 @@ public class HackerGame : MonoBehaviour {
             }
         }
 
-        // Returns false if player guesses a fake word they have already guessed and is no longer showing on the terminal
+        // Returns false if player guesses a fake answer they have already guessed and is no longer showing on the terminal
         playerInputResponse.text = "Word not found!";
         return false;
     }
@@ -299,7 +299,7 @@ public class HackerGame : MonoBehaviour {
 
                 if (CorrectAnswer.IndexOf(CorrectAnswer[i]) == fakeAnswer.IndexOf(CorrectAnswer[i]))
                 {
-                    //Fake answer entered contains same character as the answer AND in the correct position (indexes match)
+                    //Fake answer entered contains same character as the answer AND in the same position (indexes match)
                     CorrectlyPositionedChars++;
                 }
             }
@@ -328,6 +328,5 @@ public class HackerGame : MonoBehaviour {
         gameManager.ResetGame();
         GameSetup();
     }
-
 }
 

@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour {
     public enum GameState { INSTRUCTIONS, GAME, GAMEOVER };
     public static GameState CurrentState;
 
-    // On Screen Text
+    // On Screen UI Objects containing the text for each game state
     public GameObject gameUI;
     public GameObject gameOverUI;
     public GameObject instructionsUI;
