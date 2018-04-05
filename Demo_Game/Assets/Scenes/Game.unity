@@ -702,8 +702,8 @@ MonoBehaviour:
   FakeAnswers:
   - TRAP
   - TAP
-  - CLAM
-  - SLAM
+  - CLAP
+  - SLAP
 --- !u!4 &1027762893
 Transform:
   m_ObjectHideFlags: 0

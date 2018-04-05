@@ -33,6 +33,7 @@ public class HackerGame : MonoBehaviour {
     {
         stringCharLimit = 10;
         gameStringLength = 20;
+        playerInputString.text = "";
 
         GameSetup();
     }
@@ -41,7 +42,7 @@ public class HackerGame : MonoBehaviour {
     {
 		if (GameManager.CurrentState == GameManager.GameState.GAME)
         {
-            CheckPlayerInputAndDisplay();
+            CheckPlayerInputAndDisplay();           
         }
 	}
 
@@ -51,12 +52,18 @@ public class HackerGame : MonoBehaviour {
         if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
         {
             // Mouse input
-            GameSetup();
         }
 
         else if (Input.GetKeyDown(KeyCode.Return))
         {
+            if (!CheckWord(playerInputString.text))
+            {
+                Debug.Log("Word not found");
+            }
+
+            DisplayGameStrings();
             playerInputString.text = "";
+
         }
 
         else if (Input.GetKeyDown(KeyCode.Backspace))
@@ -145,7 +152,47 @@ public class HackerGame : MonoBehaviour {
             gsArray[i].hasWordPlaced = true;
         }
     }
+
+    bool CheckWord(string playerInputString)
+    {
+        Debug.Log("Checking word: " + playerInputString);
+
+        if (playerInputString == Answer)
+        {
+            Debug.Log("Correct!!");
+            return true;
+        }
+
+        for (int i = 0; i < FakeAnswers.Length; i++)
+        {
+            if (playerInputString == FakeAnswers[i])
+            {
+                Debug.Log("Fake answer " + i);
+                ReplaceFakeAnswer(FakeAnswers[i]);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void ReplaceFakeAnswer(string fakeAnswer)
+    {
+        string strToReplaceFakeAnswer = "";
+
+        for (int k = 0; k < fakeAnswer.Length; k++)
+        {
+            strToReplaceFakeAnswer += ".";
+        }
+
+        for (int i = 0; i < gsArray.Length; i++)
+        {
+            if (gsArray[i].str.Contains(fakeAnswer))
+            {
+                gsArray[i].str = gsArray[i].str.Replace(fakeAnswer, strToReplaceFakeAnswer);
+                break;
+            }
+        }
+    }
 }
 
-
-//  TestInt = TestString.IndexOf(Answer);
