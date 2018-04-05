@@ -1392,11 +1392,10 @@ MonoBehaviour:
   CorrectAnswer: CLAP
   FakeAnswers:
   - TRAP
-  - CARP
-  - MALL
+  - PART
+  - TAKE
   - PRAY
-  - TRY
-  - CRY
+  - CART
   - MAKE
 --- !u!4 &1027762893
 Transform:
